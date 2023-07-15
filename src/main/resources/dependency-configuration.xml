@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="reservationFileRepository" class="learn.masteryweek.data.ReservationFileRepository">
+        <constructor-arg value="./data/reservations"/>
+        <constructor-arg ref="hostFileRepository"/>
+    </bean>
+
+    <bean id="guestFileRepository" class="learn.masteryweek.data.GuestFileRepository">
+        <constructor-arg value="./data/guests.csv"/>
+    </bean>
+
+    <bean id="hostFileRepository" class="learn.masteryweek.data.HostFileRepository">
+        <constructor-arg value="./data/hosts.csv"/>
+    </bean>
+
+    <bean id="io" class="learn.masteryweek.ui.ConsoleIO"/>
+
+    <bean id="view" class="learn.masteryweek.ui.View">
+        <constructor-arg ref="io"/>
+        <constructor-arg ref="hostService"/>
+        <constructor-arg ref="guestService"/>
+        <constructor-arg ref="reservationService"/>
+    </bean>
+
+    <bean id="reservationService" class="learn.masteryweek.domain.ReservationService">
+        <constructor-arg ref="reservationFileRepository"/>
+        <constructor-arg ref="guestFileRepository"/>
+        <constructor-arg ref="hostFileRepository"/>
+    </bean>
+
+    <bean id="guestService" class="learn.masteryweek.domain.GuestService">
+        <constructor-arg ref="guestFileRepository"/>
+    </bean>
+
+    <bean id="hostService" class="learn.masteryweek.domain.HostService">
+        <constructor-arg ref="hostFileRepository"/>
+    </bean>
+
+    <bean class="learn.masteryweek.ui.Controller">
+        <constructor-arg ref="guestService"/>
+        <constructor-arg ref="hostService"/>
+        <constructor-arg ref="reservationService"/>
+        <constructor-arg ref="view"/>
+    </bean>
+
+</beans>
